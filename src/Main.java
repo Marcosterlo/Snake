@@ -2,17 +2,9 @@ import processing.core.PApplet;
 
 public class Main extends PApplet {
 		
-	public int nRow;
-	public int nCol;
 	public int spessore;
-
-	public int getNRow() {
-		return this.nRow;
-	}
-
-	public int getNCol() {
-		return this.nCol;
-	}
+	private int gamemode;
+	private int highscore;
 
 	public int getSpessore() {
 		return this.spessore;
@@ -28,25 +20,40 @@ public class Main extends PApplet {
 	public void settings() {
 		size(400, 400);		
 		this.spessore = 20;
-		this.nRow = height/this.getSpessore();
-		this.nCol = width/this.getSpessore();
+		this.gamemode = 1;
 		s = new Snake(this);
-		f = new Food(this);
+		f = new Food(this, s);
 	}
 
 	public void draw() {
-		background(64);
-		grid();
-		s.step();
-		f.step();
-		// interaction between snake and food
-		if (s.getAct().equals(f.getAct())) {
-			s.add();
-			f.setEaten(true);
+		switch(gamemode) {
+			case 0:
+				background(64);
+				grid();
+				s.step();
+				f.step();
+				// interaction between snake and food
+				if (s.getAct().equals(f.getAct())) {
+					s.add();
+					f.setEaten(true);
+				}
+				s.render();
+				f.render();
+				if (s.getGameOver()) {
+					this.gamemode = 1;
+					//s.restart();
+					break;
+				}
+				delay(150);
+				break;
+			case 1:
+				// Entry window
+				rect(100, 100, 100, 100, 7);	
+				if (mousePressed) {
+					this.gamemode = 0;
+				}
+				break;
 		}
-		s.render();
-		f.render();
-		delay(200);
 	}
 
 	public void grid() {
@@ -55,10 +62,6 @@ public class Main extends PApplet {
 			line(i*this.getSpessore(), 0, i*this.getSpessore(), height);
 			line(0, i*this.getSpessore(), width, i*this.getSpessore());
 		}
-	}
-
-	public void mouseClicked() {
-		s.add();
 	}
 
 	public void keyPressed() {

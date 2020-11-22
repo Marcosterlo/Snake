@@ -33,12 +33,24 @@ public class Snake {
 		return this.act;
 	}
 
+	public Point[] getHead() {
+		return this.head;
+	}
+
+	public ArrayList<Point> getBody() {
+		return this.body;
+	}
+
 	public int getSize() {
 		return this.body.size();
 	}
 
 	public Point getVel() {
 		return this.vel;
+	}
+
+	public boolean getGameOver() {
+		return this.gameOver;
 	}
 
 	public void setVel(int xv, int yv) {
@@ -65,8 +77,17 @@ public class Snake {
 					this.gameOver = true;
 				}
 			}
-			if (this.act.getX() < 0 || this.act.getX() >= 20 || this.act.getY() < 0 || this.act.getY() >= 20) {
-				this.gameOver = true;
+			if (this.act.getX() < 0) {
+				this.act.setX(19);
+			}
+			else if (this.act.getX() > 19) {
+				this.act.setX(0);
+			}
+			if (this.act.getY() < 0) {
+				this.act.setY(19);
+			}
+			else if (this.act.getY() > 19) {
+				this.act.setY(0);
 			}
 			// body part
 			if (this.body.size() == 1) {
@@ -80,12 +101,16 @@ public class Snake {
 			}
 		}	
 	}
+	
+	public void restart() {
+		this.act = new Point(20/2, 20/2);
+		this.head[0] = this.act;
+		this.vel = new Point(1, 0);
+		this.body.clear();
+		this.gameOver = false;
+	}
 
 	public void render() {
-		if (this.gameOver) {
-			sketch.noLoop();
-			System.out.println("Game over");
-		}
 		sketch.fill(0, 0, 255);
 		this.sketch.rect(this.act.getX() * 20, this.act.getY() * 20, 20, 20, 7);
 		// body part

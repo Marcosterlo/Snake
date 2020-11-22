@@ -26,10 +26,26 @@ public class Food {
 		this.eaten = val;			
 	}
 
+	public void reassign() {
+		this.act.setX((int) sketch.random(0, 20)); 			
+		this.act.setY((int) sketch.random(0, 20)); 			
+	}
+
 	public void step() {
 		if (this.getEaten()) {
-			this.act.setX((int) sketch.random(0, 20)); 			
-			this.act.setY((int) sketch.random(0, 20)); 			
+			int coex = 1;
+			while (coex == 1) {
+				this.reassign();
+				int check = 0;
+				for (Point p : s.getBody()) {
+					if (!this.act.equals(p)) {
+						check++;
+					}
+				}
+				if (check == s.getBody().size() && !(this.act.equals(s.getHead()[0]))) {
+					coex = 0;
+				}
+			}
 			this.setEaten(false);
 		}
 	}
